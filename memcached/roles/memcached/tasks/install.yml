@@ -1,0 +1,12 @@
+- name: install memcached package
+  yum:
+    name:
+      - memcached-1.5.6
+      - python-memcached-1.58
+    state: present
+
+- name: config /etc/sysconfig/memcached
+  template:
+    src: memcached
+    dest: /etc/sysconfig/memcached
+  notify: restart memcached

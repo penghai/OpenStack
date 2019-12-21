@@ -1,0 +1,3 @@
+keepalived_interface: eth0
+keepalived_router_id: 140
+keepalived_haproxy_vip: 192.168.99.220

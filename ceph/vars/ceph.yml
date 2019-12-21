@@ -1,0 +1,35 @@
+#Set the type of yum source to use (local|aliyun)
+install_yum_mode: local
+
+ceph_admin: ph-node01
+ceph_initdir: /root/ceph_cluster
+cluster_network: 10.127.1.0/24
+public_network: 172.16.1.0/24
+mons: ph-node01 ph-node02 ph-node03
+disks: [/dev/vdb,/dev/vdc]
+
+mgr_port: "8080"
+mgr_https: "False"
+mgr_user: admin
+mgr_password: admin
+
+ceph_osd_pgs: 100
+pools:
+  - volumes:
+      name: volumes
+      replicated_size: 3
+      total_data: 0.85
+  - images:
+      name: images
+      replicated_size: 2
+      total_data: 0.05
+  - backups:
+      name: backups
+      replicated_size: 2
+      total_data: 0.05
+  - vms:
+      name: vms
+      replicated_size: 2
+      total_data: 0.05
+
+ceph_user_keydir: /root/ceph_userkey

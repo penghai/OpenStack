@@ -1,0 +1,5 @@
+- hosts: compute_nodes
+  vars_files:
+    - "vars/openstack.yml"
+  roles:
+    - role: libvirt

@@ -1,0 +1,5 @@
+- hosts: mariadb_nodes
+  vars_files:
+    - "vars/mariadb.yml"
+  roles:
+    - role: mariadb

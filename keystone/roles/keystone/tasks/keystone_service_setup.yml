@@ -1,0 +1,18 @@
+- name: Check keystone status
+  shell: source /root/admin-openrc;openstack project list --domain default
+  register: result
+  retries : 3 
+  delay: 5
+  until: result.rc == 0
+  run_once: true
+
+- name: Check service project
+  shell: source /root/admin-openrc;openstack project show --domain default service
+  register: service_project 
+  ignore_errors: yes
+  run_once: true
+
+- name: create service project
+  shell: source /root/admin-openrc;openstack project create --domain Default --description "Service Project" service
+  when: service_project.rc != 0
+  run_once: true

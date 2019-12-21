@@ -1,0 +1,2 @@
+- import_playbook: install_control-nova.yml 
+- import_playbook: install_compute-nova.yml 

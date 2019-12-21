@@ -1,0 +1,7 @@
+---
+# tasks file for roles/compute_neutron
+
+- include: install.yml
+
+- include: execute_start.yml
+

@@ -1,0 +1,30 @@
+- name: install package
+  yum:
+    name:
+      - openstack-keystone
+      - httpd
+      - mod_wsgi
+      - python-openstackclient-doc
+      - openstack-selinux
+      - openstack-utils
+    state: present
+
+- name: config keystone.conf
+  template:
+    src: keystone.conf
+    dest: /etc/keystone/keystone.conf
+
+- name: Configure the Apache HTTP server
+  template:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+  with_items:
+    - { src: httpd.conf, dest: /etc/httpd/conf/httpd.conf }
+    - { src: wsgi-keystone.conf, dest: /etc/httpd/conf.d/wsgi-keystone.conf }  
+  notify: restart httpd
+
+- name: Start the Apache HTTP service and configure it to start when the system boots
+  service:
+    name: httpd
+    state: started 
+    enabled: true

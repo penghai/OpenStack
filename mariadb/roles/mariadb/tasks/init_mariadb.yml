@@ -1,0 +1,50 @@
+- name: init the root password
+  mysql_user:
+    name: '{{mariadb_user}}'
+    password: '{{mariadb_password}}'
+    update_password: always
+    host_all: yes
+  ignore_errors: yes
+
+- name: Configure secret login
+  template:
+    src: my.cnf
+    dest: /root/.my.cnf 
+
+- name: Removes all anonymous user accounts
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+
+- name: Removes anonymous user account for localhost
+  mysql_user:
+    name: "{{mariadb_user}}"
+    host: '{{ansible_hostname}}'
+    state: absent
+
+- name: Remove test database 
+  mysql_db:
+    name: test
+    state: absent
+
+- name: Add root user remote access 
+  mysql_user:
+    host: '%'
+    name: "{{mariadb_user}}"
+    password: "{{mariadb_password}}"
+    priv: '*.*:ALL,GRANT'
+    state: present 
+
+- name: delete ib_logfile file
+  file:
+    path: /var/lib/mysql/{{item}}
+    state: absent
+  with_items:
+    - ib_logfile0
+    - ib_logfile1
+
+- name: stop mariadb
+  service:
+    name: mariadb
+    state: stopped 

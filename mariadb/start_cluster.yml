@@ -1,0 +1,32 @@
+- hosts: mariadb_nodes
+  vars_files:
+    - "vars/mariadb.yml"
+  tasks:
+    - name: set _WSREP_NEW_CLUSTER env
+      shell: systemctl set-environment _WSREP_NEW_CLUSTER=--wsrep-new-cluster
+      when: ansible_hostname == (mariadb_cluste_init)
+
+    - name: Start the first node of the mariadb cluster
+      service:
+        name: mariadb
+        state: started
+      when: ansible_hostname == (mariadb_cluste_init)
+
+    - name: unset _WSREP_NEW_CLUSTER env
+      shell: systemctl unset-environment _WSREP_NEW_CLUSTER
+      when: ansible_hostname == (mariadb_cluste_init)
+
+    - name: Waiting times for 15s
+      pause: seconds=15
+
+    - name: Start the remaining nodes of the mariadb cluster
+      service:
+        name: mariadb
+        state: started
+      when: ansible_hostname != (mariadb_cluste_init)
+
+    - name: Restart the first node of the mariadb cluster
+      service:
+        name: mariadb
+        state: restarted
+      when: ansible_hostname == (mariadb_cluste_init)

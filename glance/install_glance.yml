@@ -1,0 +1,5 @@
+- hosts: glance_nodes
+  vars_files:
+    - "vars/glance.yml"
+  roles:
+    - role: glance

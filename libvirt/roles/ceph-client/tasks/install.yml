@@ -1,0 +1,15 @@
+- name: install 
+  yum:
+    name: ceph-common
+    state: present
+
+- name: config secret.xml
+  template:
+    src: secret.xml
+    dest: /etc/ceph/secret.xml
+
+- name: add the secret key to libvirt 
+  shell: virsh secret-define --file /etc/ceph/secret.xml
+
+- name: set virsh secret value is client.cinder
+  shell: virsh secret-set-value --secret {{secret_uuid}} --base64 $(ceph auth get-key client.cinder)

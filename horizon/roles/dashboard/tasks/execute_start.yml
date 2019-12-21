@@ -1,0 +1,8 @@
+- name: Restart the web server and session storage service 
+  service:
+    name: "{{item}}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - httpd.service
+    - memcached.service

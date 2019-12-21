@@ -1,0 +1,10 @@
+mariadb_user: root
+mariadb_password: root
+
+keystone_db_name: keystone
+keystone_db_user: keystone
+keystond_db_password: keystone
+
+mgnt_vip: 192.168.99.220
+mgnt_passwd: admin
+region_name: RegionOne

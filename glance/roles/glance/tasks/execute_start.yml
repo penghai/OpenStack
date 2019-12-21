@@ -1,0 +1,16 @@
+- name: copy ceph user key
+  copy:
+    src: ceph.client.glance.keyring
+    dest: /etc/ceph/ceph.client.glance.keyring
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Start the Image services and configure them to start when the system boots
+  service:
+    name: "{{item}}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - openstack-glance-api
+    - openstack-glance-registry

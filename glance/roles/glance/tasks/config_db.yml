@@ -1,0 +1,66 @@
+- name: Select {{glance_db_name}} database
+  shell: mysql -u{{mariadb_user}} -p{{mariadb_password}} -e "select * from information_schema.SCHEMATA where schema_name='{{glance_db_name}}';"|grep -w {{glance_db_name}}
+  ignore_errors: yes
+  register: info
+  run_once: true
+
+- name: Create the {{glance_db_name}} database
+  shell: mysql -u{{mariadb_user}} -p{{mariadb_password}} -e "CREATE DATABASE {{glance_db_name}};"
+  ignore_errors: yes
+  when: info.rc != 0
+  run_once: true
+
+- name: Grant proper access to the database
+  shell: mysql -u{{mariadb_user}} -p{{mariadb_password}} -e "GRANT ALL PRIVILEGES ON {{glance_db_name}}.* TO '{{glance_db_user}}'@'{{item}}' IDENTIFIED BY '{{glance_db_password}}';"
+  with_items:
+    - localhost
+    - "%"
+  run_once: true
+
+- name: Check {{glance_name}} user
+  shell: source /root/admin-openrc && openstack user show {{glance_name}}
+  ignore_errors: yes
+  register: user_check
+  run_once: true
+  
+- name: Create {{glance_name}} user
+  shell: source /root/admin-openrc && openstack user create --domain default --password {{glance_name}} {{glance_password}}
+  when: user_check.rc != 0 
+  run_once: true
+
+- name: Add the admin role to the {{glance_name}} user and service project
+  shell: source /root/admin-openrc && openstack role add --project service --user {{glance_name}} admin
+  run_once: true
+
+- name: Check service entity
+  shell: source /root/admin-openrc && openstack service show glance
+  ignore_errors: yes
+  register: service_check
+  run_once: true
+
+- name: Create the glance service entity
+  shell: source /root/admin-openrc && openstack service create --name glance --description "OpenStack Image" image
+  when: service_check.rc != 0
+  run_once: true
+
+- name: Check the Image service API endpoints
+  shell: source /root/admin-openrc && openstack endpoint list|grep -w glance
+  ignore_errors: yes
+  register: endpoint_check
+  run_once: true
+
+- name: Create the Image service API endpoints
+  shell: source /root/admin-openrc && openstack endpoint create --region {{region_name}} image {{item}} http://{{mgnt_vip}}:9292
+  with_items:
+    - public
+    - internal
+    - admin
+  when: endpoint_check.rc != 0
+  run_once: true
+
+- name: Populate the Image service database
+  shell: su -s /bin/sh -c "glance-manage {{item}}" glance
+  with_items:
+    - db_sync
+    - db_load_metadefs
+  run_once: true

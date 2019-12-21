@@ -1,0 +1,23 @@
+- name: install libvirt package
+  yum:
+    name:
+      - libvirt-python
+      - libvirt-devel
+      - libvirt-admin
+      - libvirt-lock-sanlock
+      - libvirt-daemon-kvm
+      - libvirt-docs
+      - libvirt-client
+    state: present
+
+- name: config libvirtd.conf
+  template:
+    src: libvirtd.conf
+    dest: /etc/libvirt/libvirtd.conf
+  notify: restart libvirtd
+
+- name: config libvirtd 
+  template:
+    src: libvirtd
+    dest: /etc/sysconfig/libvirtd
+  notify: restart libvirtd

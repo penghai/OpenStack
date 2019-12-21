@@ -1,0 +1,45 @@
+- name: copy percona-xtrabackup file 
+  copy:
+    src: percona-xtrabackup-24-2.4.15-1.el7.x86_64.rpm
+    dest: /tmp/percona-xtrabackup-24-2.4.15-1.el7.x86_64.rpm
+
+- name: install cluster package
+  yum:
+    name:
+      - mariadb-server-galera
+      - /tmp/percona-xtrabackup-24-2.4.15-1.el7.x86_64.rpm
+    state: present
+
+- name: config galera.cnf
+  template:
+    src: galera.cnf
+    dest: /etc/my.cnf.d/galera.cnf
+
+- name: set _WSREP_NEW_CLUSTER env
+  shell: systemctl set-environment _WSREP_NEW_CLUSTER=--wsrep-new-cluster 
+  when: ansible_hostname == (mariadb_cluste_init)
+
+- name: Start the first node of the mariadb cluster
+  service:
+    name: mariadb
+    state: started
+  when: ansible_hostname == (mariadb_cluste_init) 
+
+- name: unset _WSREP_NEW_CLUSTER env
+  shell: systemctl unset-environment _WSREP_NEW_CLUSTER
+  when: ansible_hostname == (mariadb_cluste_init)
+
+- name: Waiting times for 15s 
+  pause: seconds=15
+
+- name: Start the remaining nodes of the mariadb cluster
+  service:
+    name: mariadb
+    state: started
+  when: ansible_hostname != (mariadb_cluste_init) 
+
+- name: Restart the first node of the mariadb cluster
+  service:
+    name: mariadb
+    state: restarted
+  when: ansible_hostname == (mariadb_cluste_init) 

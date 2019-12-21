@@ -1,0 +1,131 @@
+- name: Select nova all and placement database
+  shell: mysql -u{{mariadb_user}} -p{{mariadb_password}} -e "select * from information_schema.SCHEMATA where schema_name='{{item}}';"|grep -w {{item}}
+  with_items:
+    - "{{nova_db_name}}"
+    - "{{nova_api_db_name}}"
+    - "{{nova_cell0_db_name}}"
+    - "{{placement_db_name}}"
+  ignore_errors: yes
+  register: info
+  run_once: true
+
+- name: Create nova all and placement database
+  shell: mysql -u{{mariadb_user}} -p{{mariadb_password}} -e "CREATE DATABASE {{item[0]}};"
+  with_together:
+    - ["{{nova_db_name}}","{{nova_api_db_name}}","{{nova_cell0_db_name}}","{{placement_db_name}}"]
+    - "{{info.results}}"
+  when: item[1].rc != 0
+  run_once: true
+
+- name: Grant proper access to the nova database
+  shell: mysql -u{{mariadb_user}} -p{{mariadb_password}} -e "GRANT ALL PRIVILEGES ON {{item[0]}}.* TO '{{nova_db_user}}'@'{{item[1]}}' IDENTIFIED BY '{{nova_db_password}}';"
+  with_nested:
+    - ["{{nova_db_name}}","{{nova_api_db_name}}","{{nova_cell0_db_name}}"]
+    - [localhost,"%"]
+  run_once: true
+
+- name: Grant proper access to the placement database
+  shell: mysql -u{{mariadb_user}} -p{{mariadb_password}} -e "GRANT ALL PRIVILEGES ON {{placement_db_name}}.* TO '{{placement_db_user}}'@'{{item}}' IDENTIFIED BY '{{placement_db_password}}';"
+  with_items:
+    - localhost
+    - "%"
+  run_once: true
+
+- name: Check nova and placement user
+  shell: source /root/admin-openrc && openstack user show {{item}}
+  with_items:
+    - "{{nova_name}}"
+    - "{{placement_name}}"
+  ignore_errors: yes
+  register: user_check
+  run_once: true
+  
+- name: Create nova and placement user
+  shell: source /root/admin-openrc && openstack user create --domain default --password {{item[0].user}} {{item[0].password}}
+  with_together:
+    - [{user: "{{nova_name}}",password: "{{nova_password}}"},{user: "{{placement_name}}",password: "{{placement_password}}"}]
+    - "{{user_check.results}}"
+  when: item[1].rc != 0
+  run_once: true
+
+- name: Add the admin role to the nova and placement user and service project
+  shell: source /root/admin-openrc && openstack role add --project service --user {{item}} admin
+  with_items:
+    - "{{nova_name}}"
+    - "{{placement_name}}"
+  run_once: true
+
+- name: Check nova service entity
+  shell: source /root/admin-openrc && openstack service show nova
+  ignore_errors: yes
+  register: service_check_nova
+  run_once: true
+
+- name: Create the nova service entity
+  shell: source /root/admin-openrc && openstack service create --name nova --description "OpenStack Compute" compute
+  when: service_check_nova.rc != 0
+  run_once: true
+
+- name: Check Placement API service entity
+  shell: source /root/admin-openrc && openstack service show placement
+  ignore_errors: yes
+  register: service_check_placement
+  run_once: true
+
+- name: Create the Placement API entry in the service catalog
+  shell: source /root/admin-openrc && openstack service create --name placement --description "Placement API" placement
+  when: service_check_placement.rc != 0
+  run_once: true
+
+- name: Check the Compute API service endpoints
+  shell: source /root/admin-openrc && openstack endpoint list|grep -w nova
+  ignore_errors: yes
+  register: endpoint_check_nova
+  run_once: true
+
+- name: Create the Compute API service endpoints
+  shell: source /root/admin-openrc && openstack endpoint create --region {{region_name}} compute {{item}} http://{{mgnt_vip}}:8774/v2.1
+  with_items:
+    - public
+    - internal
+    - admin
+  when: endpoint_check_nova.rc != 0
+  run_once: true
+
+- name: Check the Placement API service endpoints
+  shell: source /root/admin-openrc && openstack endpoint list|grep -w placement
+  ignore_errors: yes
+  register: endpoint_check_placement
+  run_once: true
+
+- name: Create the Placement API service endpoints
+  shell: source /root/admin-openrc && openstack endpoint create --region {{region_name}} placement {{item}} http://{{mgnt_vip}}:8778
+  with_items:
+    - public
+    - internal
+    - admin
+  when: endpoint_check_placement.rc != 0
+  run_once: true
+
+- name: Populate the nova-api and placement databases 
+  shell: su -s /bin/sh -c "nova-manage api_db sync" nova
+  run_once: true
+
+- name: Register the cell0 database
+  shell: su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova
+  run_once: true
+  
+- name: check nova cell0 and cell1 are registered correctly
+  shell: su -s /bin/sh -c "nova-manage cell_v2 list_cells" nova|grep cell1
+  ignore_errors: yes
+  register: check_cell1
+  run_once: true
+  
+- name: Create the cell1 cell
+  shell: su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" nova
+  run_once: true
+  when: check_cell1.rc != 0
+  
+- name: Populate the nova database
+  shell: su -s /bin/sh -c "nova-manage db sync" nova
+  run_once: true

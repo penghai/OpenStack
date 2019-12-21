@@ -1,0 +1,22 @@
+- name: install haproxy
+  yum:
+    name: haproxy-1.5.18
+    state: present
+
+- name: Configure the haproxy file
+  template: 
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+  notify: restart haproxy 
+
+- name: Create /var/lib/haproxy/dev 
+  file:
+    path: /var/lib/haproxy/dev
+    state: directory
+    mode: '0755' 
+
+- name: Configure haproxy log file
+  copy:
+    src: 49-haproxy.conf
+    dest: /etc/rsyslog.d/49-haproxy.conf
+  notify: restart rsyslog 

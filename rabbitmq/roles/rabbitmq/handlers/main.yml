@@ -1,0 +1,14 @@
+---
+# handlers file for roles/rabbitmq
+
+- name: restart rabbitmq-server
+  service:
+    name: rabbitmq-server
+    state: restarted
+    enabled: yes
+
+- name: start xinetd
+  service:
+    name: xinetd
+    state: restarted
+    enabled: yes

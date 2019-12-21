@@ -1,0 +1,15 @@
+mariadb_user: root
+mariadb_password: root
+
+glance_db_name: glance
+glance_db_user: glance
+glance_db_password: glance
+mgnt_vip: 192.168.99.220
+mgnt_passwd: admin
+region_name: RegionOne
+memcached_servers: 192.168.99.221,192.168.99.222,192.168.99.223
+
+glance_name: glance
+glance_password: glance
+rabbitmq_user: openstack
+rabbitmq_password: openstack

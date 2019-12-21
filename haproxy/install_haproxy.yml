@@ -1,0 +1,5 @@
+- hosts: haproxy_nodes
+  vars_files:
+    - "vars/haproxy.yml"
+  roles:
+    - role: haproxy

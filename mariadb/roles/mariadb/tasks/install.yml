@@ -1,0 +1,26 @@
+- name: install mariadb package
+  yum:
+    name:
+      - mariadb-server
+      - MySQL-python
+    state: present
+
+- name: delete multiple file
+  file:
+    path: /etc/my.cnf.d/{{item}}
+    state: absent
+  with_items:
+    - auth_gssapi.cnf
+    - enable_encryption.preset
+    - galera.cnf
+
+- name: config /etc/my.cnf.d/mariadb-server.cnf 
+  template:
+    src: mariadb-server.cnf
+    dest: /etc/my.cnf.d/mariadb-server.cnf
+
+- name: start mariadb
+  service:
+    name: mariadb
+    state: started 
+    enabled: yes

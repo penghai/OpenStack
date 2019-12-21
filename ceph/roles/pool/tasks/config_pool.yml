@@ -1,0 +1,72 @@
+- name: ceph cluster status
+  shell: ceph health
+  ignore_errors: yes
+  register: ceph_cluster_status
+
+- name: get ceph cluster client version
+  shell: ceph osd get-require-min-compat-client
+  ignore_errors: yes
+  register: ceph_client
+
+- name: set ceph cluster client luminous
+  shell: ceph osd set-require-min-compat-client luminous
+  when: ceph_client.stdout != "luminous"
+
+- name: set ceph balancer mode upmap
+  shell: ceph balancer mode upmap
+
+- name: set ceph balancer on
+  shell: ceph balancer on
+
+- name: count osd
+  shell: ceph osd ls|wc -l
+  ignore_errors: yes
+  register: count_osd
+  when: ceph_cluster_status.stdout == "HEALTH_OK"
+
+- name: count pgs
+  shell: echo "({{ceph_osd_pgs}}*{{count_osd.stdout}}*{{item.values()[0]["total_data"]}})/{{item.values()[0]["replicated_size"]}}"|bc 
+  with_items: "{{pools}}"
+  ignore_errors: yes
+  register: count_pgs
+  when: ceph_cluster_status.stdout == "HEALTH_OK"
+  run_once: true
+
+- name: copy script file to tmp
+  copy:
+    src: plan_osd_pgs.sh
+    dest: /tmp/plan_osd_pgs.sh
+
+- name: get pool
+  shell: ceph osd pool ls|grep -w {{item.values()[0]["name"]}}
+  with_items: "{{pools}}"
+  ignore_errors: yes
+  register: pool_status
+  when: ceph_cluster_status.stdout == "HEALTH_OK"
+  run_once: true
+
+- name: create pool
+  shell: ceph osd pool create {{item[1].values()[0]["name"]}} `bash /tmp/plan_osd_pgs.sh {{item[0].values()[4]}}`;
+  with_together:
+    - "{{count_pgs.results}}"
+    - "{{pools}}"
+    - "{{pool_status.results}}"
+  run_once: true
+  register: info
+  when: ceph_cluster_status.stdout == "HEALTH_OK" and  (item[2].values()[4]) != (item[1].values()[0]["name"])
+
+- name: set pool size
+  shell: ceph osd pool set {{item[0].values()[0]["name"]}} size {{item[0].values()[0]["replicated_size"]}} 
+  with_together:
+    - "{{pools}}"
+    - "{{info.results}}"
+  run_once: true
+  when: ceph_cluster_status.stdout == "HEALTH_OK" and (item[1].changed)
+
+- name: init pool rbd
+  shell: rbd pool init {{item[0].values()[0]["name"]}} 
+  with_together:
+    - "{{pools}}"
+    - "{{info.results}}"
+  run_once: true
+  when: ceph_cluster_status.stdout == "HEALTH_OK" and (item[1].changed)

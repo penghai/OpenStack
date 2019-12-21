@@ -1,0 +1,19 @@
+- name: copy mysqlchk file
+  template:
+    src: mysqlchk
+    dest: /etc/xinetd.d/mysqlchk
+
+- name: config /etc/services
+  replace:
+    path: /etc/services
+    regexp: '^wap-wsp(.*)9200/tcp'
+    replace: 'mysqlchk        9200/tcp'
+
+- name: copy mysqlchk file
+  template:
+    src: clustercheck
+    dest: /usr/bin/clustercheck
+    mode: '0755'
+  notify: start xinetd
+
+ 

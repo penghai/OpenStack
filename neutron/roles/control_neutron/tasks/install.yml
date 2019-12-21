@@ -1,0 +1,59 @@
+- name: Install the packages
+  yum:
+    name: 
+      - openstack-neutron
+      - openstack-neutron-ml2
+      - openstack-neutron-linuxbridge
+      - ebtables
+      - ipset
+      - dnsmasq
+      - libreswan
+    state: present
+
+- name: config neutron.conf
+  template:
+    src: config/neutron.conf
+    dest: /etc/neutron/neutron.conf
+    owner: root
+    group: neutron
+    mode: "0640"
+
+- name: Configure the Modular Layer 2 (ML2) plug-in
+  template:
+    src: ml2_conf.ini
+    dest: /etc/neutron/plugins/ml2/ml2_conf.ini
+    owner: root
+    group: neutron
+    mode: "0640"
+
+- name: Configure the Linux bridge agent
+  template:
+    src: config/linuxbridge_agent.ini
+    dest: /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+    owner: root
+    group: neutron
+    mode: "0640"
+
+- name: Configure the layer-3 agent
+  template:
+    src: l3_agent.ini
+    dest: /etc/neutron/l3_agent.ini
+    owner: root
+    group: neutron
+    mode: "0640"
+
+- name: Configure the DHCP agent
+  template:
+    src: dhcp_agent.ini
+    dest: /etc/neutron/dhcp_agent.ini
+    owner: root
+    group: neutron
+    mode: "0640"
+
+- name: Configure the metadata agent
+  template:
+    src: metadata_agent.ini
+    dest: /etc/neutron/metadata_agent.ini
+    owner: root
+    group: neutron
+    mode: "0640"

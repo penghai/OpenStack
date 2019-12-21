@@ -1,0 +1,25 @@
+- name: To enable networking bridge support, typically the br_netfilter kernel module needs to be loaded. 
+  shell: modprobe br_netfilter
+
+- name: Ensure your Linux operating system kernel supports network bridge filters 
+  sysctl:
+    name: '{{ item.name }}'
+    value: '{{ item.value }}'
+    state: present
+    sysctl_set: yes
+    reload: yes
+  with_items:
+    - { name: 'net.bridge.bridge-nf-call-iptables',value: '1' }
+    - { name: 'net.bridge.bridge-nf-call-ip6tables',value: '1' }
+
+- name: Start the Networking services and configure them to start when the system boots
+  service:
+    name: "{{item}}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - neutron-server.service
+    - neutron-linuxbridge-agent.service
+    - neutron-dhcp-agent.service
+    - neutron-l3-agent.service
+    - neutron-metadata-agent.service

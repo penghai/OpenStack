@@ -1,0 +1,30 @@
+- name: create key dir
+  file:
+    path: /etc/keystone/{{item}}
+    state: directory
+    owner: keystone
+    group: keystone 
+    mode: '0700'
+  with_items:
+    - credential-keys
+    - fernet-keys
+
+- name: Initialize Fernet key repositories
+  copy:
+    src: "{{item}}"
+    dest: /etc/keystone/
+    owner: keystone
+    group: keystone 
+    mode: '0600'
+  with_items:
+    - credential-keys
+    - fernet-keys
+
+- name: Bootstrap the Identity service
+  shell: keystone-manage bootstrap --bootstrap-password {{mgnt_passwd}} --bootstrap-admin-url http://{{mgnt_vip}}:5000/v3/ --bootstrap-internal-url http://{{mgnt_vip}}:5000/v3/ --bootstrap-public-url http://{{mgnt_vip}}:5000/v3/ --bootstrap-region-id {{region_name}}
+  run_once: true
+
+- name: Create the admin-openrc file and Configure the administrative account
+  template:
+    src: admin-openrc
+    dest: /root/admin-openrc

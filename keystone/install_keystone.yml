@@ -1,0 +1,5 @@
+- hosts: keystone_nodes
+  vars_files:
+    - "vars/keystone.yml"
+  roles:
+    - role: keystone

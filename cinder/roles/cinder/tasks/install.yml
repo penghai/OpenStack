@@ -1,0 +1,35 @@
+- name: Install the packages
+  yum:
+    name: 
+      - openstack-cinder
+      - targetcli
+      - python-keystone
+      - lvm2 
+      - device-mapper-persistent-data
+    state: present
+
+- name:
+  shell: source /root/admin-openrc && openstack project list|grep admin|awk '{print $2}'
+  ignore_errors: yes
+  register: project_id
+
+- name:
+  shell: source /root/admin-openrc && openstack user list|grep admin|awk '{print $2}'
+  ignore_errors: yes
+  register: user_id
+
+- name: config cinder
+  template:
+    src: cinder.conf
+    dest: /etc/cinder/cinder.conf
+    owner: root
+    group: cinder
+    mode: "0640"
+
+- name: config multipath
+  template:
+    src: multipath.conf
+    dest: /etc/multipath.conf
+    owner: root
+    group: root
+    mode: "0640"

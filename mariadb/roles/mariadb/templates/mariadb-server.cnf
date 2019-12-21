@@ -1,0 +1,155 @@
+#
+# These groups are read by MariaDB server.
+# Use it for options that only the server (but not clients) should see
+#
+# See the examples of server my.cnf files in /usr/share/mysql/
+#
+
+[mysqld_safe]
+nice=0
+# this is read by the standalone daemon and embedded servers
+[server]
+
+# this is only for the mysqld standalone daemon
+# Settings user and group are ignored when systemd is used.
+# If you need to run mysqld under a different user or group,
+# customize your systemd unit file for mysqld/mariadb according to the
+# instructions in http://fedoraproject.org/wiki/Systemd
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+log-error=/var/log/mariadb/mariadb.log
+pid-file=/var/run/mariadb/mariadb.pid
+
+log_warnings=2
+port=3306
+bind-address={{ansible_ssh_host}}
+default_storage_engine=innodb
+
+collation-server=utf8_general_ci
+character_set_server=utf8
+
+lc_messages_dir=/usr/share/mariadb/
+lc_messages=en_US
+
+skip-character-set-client-handshake
+skip_external_locking=1
+skip_name_resolve=1
+
+expire_logs_days=15
+
+slow_query_log=1
+long_query_time=3
+slow_query_log_file=/var/log/mariadb/slow.log
+log_slow_verbosity=query_plan
+
+init_connect='set autocommit=1'
+init_connect='set names utf8'
+init_connect='set collation_connection=utf8_general_ci'
+performance_schema=ON
+
+max_connections=5000
+max_connect_errors=1000
+connect_timeout=300
+wait_timeout=1200
+interactive_timeout=1200
+net_read_timeout=600
+net_write_timeout=600
+
+thread_cache_size=128
+thread_pool_max_threads=5000
+sort_buffer_size=1M
+bulk_insert_buffer_size=64M
+tmp_table_size=64M
+max_heap_table_size=64M
+
+{% if ansible_memtotal_mb <= 4096 %}
+max_binlog_size=32M
+max_allowed_packet=32M
+innodb_buffer_pool_size=256M
+innodb_log_buffer_size=64M
+innodb_log_file_size=32M
+{% elif ansible_memtotal_mb > 4096 and ansible_memtotal_mb <= 8192 %}
+max_binlog_size=64M
+max_allowed_packet=64M
+innodb_buffer_pool_size=512M
+innodb_log_buffer_size=128M
+innodb_log_file_size=64M
+{% elif ansible_memtotal_mb > 8192 and ansible_memtotal_mb <= 16384 %}
+max_binlog_size=128M
+max_allowed_packet=128M
+innodb_buffer_pool_size=2G
+innodb_log_buffer_size=256M
+innodb_log_file_size=128M
+{% elif ansible_memtotal_mb > 16384 and ansible_memtotal_mb <= 32768 %}
+max_binlog_size=128M
+max_allowed_packet=128M
+innodb_buffer_pool_size=4G
+innodb_log_buffer_size=512M
+innodb_log_file_size=256M
+{% elif ansible_memtotal_mb > 32768 and ansible_memtotal_mb <= 65536 %}
+max_binlog_size=128M
+max_allowed_packet=128M
+innodb_buffer_pool_size=8G
+innodb_log_buffer_size=1G
+innodb_log_file_size=512M
+{% else %}
+max_binlog_size=265M
+max_allowed_packet=256M
+innodb_buffer_pool_size=16G
+innodb_log_buffer_size=512G
+innodb_log_file_size=256M
+{% endif %}
+innodb_file_per_table=1
+innodb_open_files=20480
+innodb_io_capacity=500
+innodb_flush_method=O_DIRECT
+innodb_flush_log_at_trx_commit=0
+innodb_autoinc_lock_mode=2
+innodb_doublewrite=1
+innodb_locks_unsafe_for_binlog=1
+innodb_print_all_deadlocks=1
+innodb_lock_wait_timeout=300
+innodb_buffer_pool_instances=8
+
+join_buffer_size=8M
+
+query_cache_limit=128k
+query_cache_min_res_unit=2k
+query_cache_size=0
+query_cache_type=0
+
+
+#
+# * Galera-related settings
+#
+[galera]
+# Mandatory settings
+#wsrep_on=ON
+#wsrep_provider=
+#wsrep_cluster_address=
+#binlog_format=row
+#default_storage_engine=InnoDB
+#innodb_autoinc_lock_mode=2
+#
+# Allow server to accept connections on all interfaces.
+#
+#bind-address=0.0.0.0
+#
+# Optional setting
+#wsrep_slave_threads=1
+#innodb_flush_log_at_trx_commit=0
+
+# this is only for embedded server
+[embedded]
+
+# This group is only read by MariaDB servers, not by MySQL.
+# If you use the same .cnf file for MySQL and MariaDB,
+# you can put MariaDB-only options here
+[mariadb]
+
+# This group is only read by MariaDB-10.1 servers.
+# If you use the same .cnf file for MariaDB of different versions,
+# use this group for options that older servers don't understand
+[mariadb-10.1]
+

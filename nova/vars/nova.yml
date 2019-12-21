@@ -1,0 +1,40 @@
+mariadb_user: root
+mariadb_password: root
+
+nova_db_name: nova
+nova_api_db_name: nova_api
+nova_cell0_db_name: nova_cell0
+nova_db_user: nova
+nova_db_password: nova
+
+placement_db_name: placement
+placement_db_user: placement
+placement_db_password: placement
+
+mgnt_vip: 192.168.99.220
+mgnt_passwd: admin
+region_name: RegionOne
+memcached_servers: 192.168.99.221,192.168.99.222,192.168.99.223
+
+nova_name: nova
+nova_password: nova
+
+placement_name: placement
+placement_password: placement
+
+rabbitmq_user: openstack
+rabbitmq_password: openstack
+
+#Describes the virtualization type(qemu,kvm)
+virt_type: qemu
+
+reserved_memory_mb: 4096
+reserved_cpus: 2
+cpu_allocation_ratio: 4.0
+
+secret_uuid: 8f05bc1d-326f-4d2e-ad87-ca2efeee3ac2
+
+metadata_proxy_shared_secret: aa947319e6e3
+
+neutron_name: neutron
+neutron_password: neutron

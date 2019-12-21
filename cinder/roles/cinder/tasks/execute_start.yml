@@ -1,0 +1,24 @@
+- name: copy ceph user key
+  copy:
+    src: "{{item}}"
+    dest: /etc/ceph/{{item}}
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - ceph.client.cinder.keyring
+    - ceph.client.cinder-backup.keyring
+
+- name: Start the Block Storage services and configure them to start when the system boots
+  service:
+    name: "{{item}}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - lvm2-lvmetad
+    - multipathd
+    - openstack-cinder-api
+    - openstack-cinder-scheduler
+    - openstack-cinder-volume
+    - openstack-cinder-backup
+    - target.service

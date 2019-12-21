@@ -1,0 +1,5 @@
+- hosts: memcached_nodes
+  vars_files:
+    - "vars/memcached.yml"
+  roles:
+    - role: memcached

@@ -1,0 +1,68 @@
+- name: Select {{neutron_db_name}} database
+  shell: mysql -u{{mariadb_user}} -p{{mariadb_password}} -e "select * from information_schema.SCHEMATA where schema_name='{{neutron_db_name}}';"|grep -w {{neutron_db_name}}
+  ignore_errors: yes
+  register: info
+  run_once: true
+
+- name: Create the {{neutron_db_name}} database
+  shell: mysql -u{{mariadb_user}} -p{{mariadb_password}} -e "CREATE DATABASE {{neutron_db_name}};"
+  when: info.rc != 0
+  run_once: true
+
+- name: Grant proper access to the database
+  shell: mysql -u{{mariadb_user}} -p{{mariadb_password}} -e "GRANT ALL PRIVILEGES ON {{neutron_db_name}}.* TO '{{neutron_db_user}}'@'{{item}}' IDENTIFIED BY '{{neutron_db_password}}';"
+  with_items:
+    - localhost
+    - "%"
+  run_once: true
+
+- name: Check {{neutron_name}} user
+  shell: source /root/admin-openrc && openstack user show {{neutron_name}}
+  ignore_errors: yes
+  register: user_check
+  run_once: true
+  
+- name: Create {{neutron_name}} user
+  shell: source /root/admin-openrc && openstack user create --domain default --password {{neutron_name}} {{neutron_password}}
+  when: user_check.rc != 0 
+  run_once: true
+
+- name: Add the admin role to the {{neutron_name}} user and service project
+  shell: source /root/admin-openrc && openstack role add --project service --user {{neutron_name}} admin
+  run_once: true
+
+- name: Check neutron service entity
+  shell: source /root/admin-openrc && openstack service show neutron
+  ignore_errors: yes
+  register: service_check
+  run_once: true
+
+- name: Create the neutron service entity
+  shell: source /root/admin-openrc && openstack service create --name neutron --description "OpenStack Networking" network
+  when: service_check.rc != 0
+  run_once: true
+
+- name: Check the Networking service API endpoints
+  shell: source /root/admin-openrc && openstack endpoint list|grep -w neutron
+  ignore_errors: yes
+  register: endpoint_check
+  run_once: true
+
+- name: Create the Networking service API endpoints
+  shell: source /root/admin-openrc && openstack endpoint create --region {{region_name}} network {{item}} http://{{mgnt_vip}}:9696
+  with_items:
+    - public
+    - internal
+    - admin
+  when: endpoint_check.rc != 0
+  run_once: true
+
+- name: The Networking service initialization scripts expect a symbolic link pointing to the ML2 plug-in configuration file.
+  file:
+    src: /etc/neutron/plugins/ml2/ml2_conf.ini
+    dest: /etc/neutron/plugin.ini
+    state: link
+
+- name: Populate the database
+  shell: su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
+  run_once: true

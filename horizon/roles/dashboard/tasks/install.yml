@@ -1,0 +1,20 @@
+- name: Install the packages
+  yum:
+    name: openstack-dashboard
+    state: present
+
+- name: 
+  template:
+    src: local_settings
+    dest: /etc/openstack-dashboard/local_settings
+    owner: root
+    group: apache
+    mode: "0640"
+    
+- name:
+  copy:
+    src: openstack-dashboard.conf
+    dest: /etc/httpd/conf.d/openstack-dashboard.conf
+    owner: root
+    group: root
+    mode: "0644"

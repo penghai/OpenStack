@@ -1,0 +1,8 @@
+---
+# tasks file for roles/cinder
+
+- include: install.yml
+
+- include: config_db.yml
+
+- include: execute_start.yml

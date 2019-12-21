@@ -1,0 +1,68 @@
+- name: Add CentOS-Base repository
+  template:
+    src: repo/CentOS-Base.repo
+    dest: /etc/yum.repos.d/CentOS-Base.repo
+    owner: root
+    group: root
+  when: "(install_yum_mode) == 'aliyun'"
+
+- name: Add epel repository
+  template:
+    src: repo/epel.repo
+    dest: /etc/yum.repos.d/epel.repo
+    owner: root
+    group: root
+  when: "(install_yum_mode) == 'aliyun'"
+
+- name: Add CentOS-Base repository
+  template:
+    src: repo/CentOS-Base-local.repo
+    dest: /etc/yum.repos.d/CentOS-Base.repo
+    owner: root
+    group: root
+  when: "(install_yum_mode) == 'local'"
+
+- name: Add epel repository
+  template:
+    src: repo/epel-local.repo
+    dest: /etc/yum.repos.d/epel.repo
+    owner: root
+    group: root
+  when: "(install_yum_mode) == 'local'"
+
+- name: Add openstack repository
+  template:
+    src: repo/CentOS-OpenStack-rocky.repo
+    dest: /etc/yum.repos.d/CentOS-OpenStack-rocky.repo
+    owner: root
+    group: root
+  when: (install_yum_mode == "aliyun") and (install_openstack == true)
+
+- name: Add qemu repository
+  template:
+    src: repo/CentOS-QEMU-EV.repo
+    dest: /etc/yum.repos.d/CentOS-QEMU-EV.repo
+    owner: root
+    group: root
+  when: (install_yum_mode == "aliyun") and (install_openstack == true)
+
+- name: Add openstack repository
+  template:
+    src: repo/CentOS-OpenStack-rocky-local.repo
+    dest: /etc/yum.repos.d/CentOS-OpenStack-rocky.repo
+    owner: root
+    group: root
+  when: (install_yum_mode == "local") and (install_openstack == true)
+
+- name: Add qemu repository
+  template:
+    src: repo/CentOS-QEMU-EV.repo
+    dest: /etc/yum.repos.d/CentOS-QEMU-EV-local.repo
+    owner: root
+    group: root
+  when: (install_yum_mode == "local") and (install_openstack == true)
+
+- name: yum update cache
+  yum:
+    update_cache: yes
+    state: present

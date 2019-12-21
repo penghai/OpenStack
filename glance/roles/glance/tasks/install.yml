@@ -1,0 +1,15 @@
+- name: Install the packages
+  yum:
+    name: openstack-glance
+    state: present
+
+- name: config glance
+  template:
+    src: "{{item}}"
+    dest: /etc/glance/{{item}}
+    owner: root
+    group: glance
+    mode: "0640"
+  with_items:
+    - glance-api.conf
+    - glance-registry.conf

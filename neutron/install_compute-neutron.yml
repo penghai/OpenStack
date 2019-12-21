@@ -1,0 +1,5 @@
+- hosts: compute_neutron_nodes
+  vars_files:
+    - "vars/neutron.yml"
+  roles:
+    - role: compute_neutron
