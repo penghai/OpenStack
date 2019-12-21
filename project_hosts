@@ -1,97 +1,97 @@
 [optimize_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [keepalived_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [memcached_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [rabbitmq_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [mariadb_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [haproxy_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [ceph_cluster:children]
 mon_nodes
 osd_nodes
 
 [mon_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [osd_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [openstack_nodes:children]
 control_nodes
 compute_nodes
 
 [control_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [compute_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [keystone_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [glance_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [cinder_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [control_neutron_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [compute_neutron_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [control_nova_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [compute_nova_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos
 
 [dashboard_nodes]
-192.168.99.221 ansible_ssh_host=192.168.99.221 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.222 ansible_ssh_host=192.168.99.222 ansible_ssh_user=root ansible_ssh_pass=centos
-192.168.99.223 ansible_ssh_host=192.168.99.223 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.11 ansible_ssh_host=192.168.1.11 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.12 ansible_ssh_host=192.168.1.12 ansible_ssh_user=root ansible_ssh_pass=centos
+192.168.1.13 ansible_ssh_host=192.168.1.13 ansible_ssh_user=root ansible_ssh_pass=centos

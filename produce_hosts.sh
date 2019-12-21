@@ -1,7 +1,7 @@
 #!/bin/bash
-cidr=192.168.99.0/24
-startip=192.168.99.221
-endip=192.168.99.223
+cidr=192.168.1.0/24
+startip=192.168.1.11
+endip=192.168.1.13
 user=root
 password=centos
 subnet=`ipcalc -s -n $cidr|awk -F = '{print $2}'|awk -F 0 '{print $1}'`

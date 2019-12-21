@@ -1,5 +1,5 @@
 - hosts: rabbitmq_nodes
   vars_files:
-    - "vars/rabbitmq.yml"
+    - "../deploy.yml"
   roles:
     - role: rabbitmq

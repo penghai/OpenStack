@@ -1,13 +1,12 @@
 #Set the type of yum source to use (local|aliyun)
-install_yum_mode: local
+install_yum_mode: aliyun
 ntp_server: ntp.aliyun.com      
 LC_ALL: en_US.utf8
 install_openstack: true
-cluster_init_node: &cluster_init_node ph-node01
-vip: &vip 192.168.99.220
+cluster_init_node: &cluster_init_node test01
+vip: &vip 192.168.1.10
 
-
-keepalived_interface: eth0
+keepalived_interface: ens32
 keepalived_router_id: 140
 keepalived_haproxy_vip: *vip
 
@@ -18,12 +17,12 @@ rabbitmq_password: openstack
 mariadb_user: root
 mariadb_password: root
 mariadb_cluster_name: nd_wsrep_cluster
-mariadb_cluste_init: *cluster_init_node
+mariadb_cluster_init: *cluster_init_node
 
 haproxy_vip: *vip
 haproxy_stats_port: 8888
 haproxy_maxconn: 32768
-mariadb_cluste_init: 192.168.99.221
+mariadb_cluste_init: 192.168.1.11
 mgr_port: "8080"
 
 #CEPH

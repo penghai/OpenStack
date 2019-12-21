@@ -1,5 +1,5 @@
 - hosts: keepalived_nodes
   vars_files:
-    - "vars/keepalived.yml"
+    - "../deploy.yml"
   roles:
     - role: keepalived
