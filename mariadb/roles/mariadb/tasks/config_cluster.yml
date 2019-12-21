@@ -15,19 +15,21 @@
     src: galera.cnf
     dest: /etc/my.cnf.d/galera.cnf
 
+- debug: var=(mariadb_cluster_init_node)
+
 - name: set _WSREP_NEW_CLUSTER env
   shell: systemctl set-environment _WSREP_NEW_CLUSTER=--wsrep-new-cluster 
-  when: ansible_hostname == (mariadb_cluster_init)
+  when: ansible_hostname == (mariadb_cluster_init_node)
 
 - name: Start the first node of the mariadb cluster
   service:
     name: mariadb
     state: started
-  when: ansible_hostname == (mariadb_cluster_init) 
+  when: ansible_hostname == (mariadb_cluster_init_node)
 
 - name: unset _WSREP_NEW_CLUSTER env
   shell: systemctl unset-environment _WSREP_NEW_CLUSTER
-  when: ansible_hostname == (mariadb_cluster_init)
+  when: ansible_hostname == (mariadb_cluster_init_node)
 
 - name: Waiting times for 15s 
   pause: seconds=15
@@ -36,10 +38,10 @@
   service:
     name: mariadb
     state: started
-  when: ansible_hostname != (mariadb_cluster_init) 
+  when: ansible_hostname != (mariadb_cluster_init_node) 
 
 - name: Restart the first node of the mariadb cluster
   service:
     name: mariadb
     state: restarted
-  when: ansible_hostname == (mariadb_cluster_init) 
+  when: ansible_hostname == (mariadb_cluster_init_node) 

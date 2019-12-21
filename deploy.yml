@@ -17,7 +17,7 @@ rabbitmq_password: openstack
 mariadb_user: root
 mariadb_password: root
 mariadb_cluster_name: nd_wsrep_cluster
-mariadb_cluster_init: *cluster_init_node
+mariadb_cluster_init_node: *cluster_init_node
 
 haproxy_vip: *vip
 haproxy_stats_port: 8888
