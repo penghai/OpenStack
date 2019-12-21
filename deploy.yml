@@ -22,7 +22,7 @@ mariadb_cluster_init: *cluster_init_node
 haproxy_vip: *vip
 haproxy_stats_port: 8888
 haproxy_maxconn: 32768
-mariadb_cluste_init: 192.168.1.11
+mariadb_cluster_init: 192.168.1.11
 mgr_port: "8080"
 
 #CEPH
