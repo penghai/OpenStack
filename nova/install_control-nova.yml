@@ -1,5 +1,5 @@
 - hosts: control_nova_nodes
   vars_files:
-    - "vars/nova.yml"
+    - "../deploy.yml"
   roles:
     - role: control_nova

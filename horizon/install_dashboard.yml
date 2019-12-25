@@ -1,5 +1,5 @@
 - hosts: dashboard_nodes
   vars_files:
-    - "vars/dashboard.yml"
+    - "../deploy.yml"
   roles:
     - role: dashboard

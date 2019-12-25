@@ -1,5 +1,5 @@
 - hosts: mon_nodes
   vars_files:
-    - "vars/ceph.yml"
+    - "../deploy.yml"
   roles:
     - role: mon

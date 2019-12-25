@@ -1,5 +1,5 @@
 - hosts: cinder_nodes
   vars_files:
-    - "vars/cinder.yml"
+    - "../deploy.yml"
   roles:
     - role: cinder

@@ -56,8 +56,8 @@
 
 - name: Add qemu repository
   template:
-    src: repo/CentOS-QEMU-EV.repo
-    dest: /etc/yum.repos.d/CentOS-QEMU-EV-local.repo
+    src: repo/CentOS-QEMU-EV-local.repo
+    dest: /etc/yum.repos.d/CentOS-QEMU-EV.repo
     owner: root
     group: root
   when: (install_yum_mode == "local") and (install_openstack == true)

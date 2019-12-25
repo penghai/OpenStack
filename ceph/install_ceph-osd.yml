@@ -1,11 +1,11 @@
 - hosts: osd_nodes
   vars_files:
-    - "vars/ceph.yml"
+    - "../deploy.yml"
   roles:
     - role: osd
 
 - hosts: mon_nodes
   vars_files:
-    - "vars/ceph.yml"
+    - "../deploy.yml"
   roles:
     - role: pool 

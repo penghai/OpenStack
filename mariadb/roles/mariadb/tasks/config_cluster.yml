@@ -15,8 +15,6 @@
     src: galera.cnf
     dest: /etc/my.cnf.d/galera.cnf
 
-- debug: var=(mariadb_cluster_init_node)
-
 - name: set _WSREP_NEW_CLUSTER env
   shell: systemctl set-environment _WSREP_NEW_CLUSTER=--wsrep-new-cluster 
   when: ansible_hostname == (mariadb_cluster_init_node)
